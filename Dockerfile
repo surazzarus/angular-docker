@@ -1,9 +1,8 @@
 ### STAGE 1: Build ###
-
-# We label our stage as 'builder'
 FROM node:10.16.0-alpine as builder
 
-COPY package.json package-lock.json ./
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY ./package*.json ./
 
 RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
@@ -18,8 +17,8 @@ COPY . .
 RUN npm run build --prod
 
 
-### STAGE 2: Setup ###
 
+### STAGE 2: Setup ###
 FROM nginx:1.17.1-alpine
 
 ## Copy our default nginx config
